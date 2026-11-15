@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — what a pre-token protocol's token would be worth</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="rule"></div>
+  <p class="kicker">A field guide to protocols that record no token yet</p>
+  <h1>Token Radar</h1>
+  <p class="standfirst">Every protocol below is priced the way the market prices the tokens that already trade: off its own sector's multiple, at its own scale — live tokens show market cap growing like the square root of TVL — then adjusted a little for how fast it is growing, how long it has run, and how far it reaches.</p>
+  <dl class="facts" id="facts"></dl>
+</header>
+
+<section class="model" id="model" aria-label="How the ranking works"></section>
+
+<section class="comparables" aria-label="Sector comparables">
+  <h2>What each sector's tokens trade at</h2>
+  <p class="sub">The median market-cap/TVL of the sector's protocols whose token already trades. A sector with fewer than three live protocols is too thin to price off, so it falls back to the whole market.</p>
+  <table id="sectors">
+    <thead><tr><th>Sector</th><th class="num">Live protocols</th><th class="num">Median mcap / TVL</th><th class="num">vs market</th></tr></thead>
+    <tbody id="sectorRows"></tbody>
+  </table>
+</section>
+
+<section class="controls" aria-label="Filter and sort the board">
+  <label>Search <input id="q" type="search" placeholder="name or slug…" autocomplete="off"></label>
+  <label>Sector <select id="cat"><option value="">All sectors</option></select></label>
+  <label>Chain <select id="chain"><option value="">All chains</option></select></label>
+  <label>Band <select id="band"><option value="">All bands</option><option>A</option><option>B</option><option>C</option><option>D</option></select></label>
+  <label class="check"><input id="watch" type="checkbox"> Watchlist only</label>
+  <label>Sort <select id="sort">
+    <option value="rank">Rank (implied value)</option>
+    <option value="tvl">TVL</option>
+    <option value="growth">7-day change</option>
+    <option value="age">Age</option>
+    <option value="name">Name A–Z</option>
+  </select></label>
+  <p class="count" id="count" aria-live="polite"></p>
+</section>
+
+<main>
+  <section aria-label="The board">
+    <table id="board">
+      <thead><tr>
+        <th data-k="rank">#</th><th data-k="name">Protocol</th><th data-k="category">Sector</th>
+        <th data-k="chains">Chains</th><th data-k="tvl" class="num">TVL</th><th data-k="growth" class="num">7d</th>
+        <th data-k="age" class="num">Age</th><th data-k="sector" class="num">Sector ×</th><th data-k="implied" class="num">Implied value</th><th data-k="band">Band</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="hint">Click a row for its value breakdown and farm plan. Ranks are the model's claim, not the table's order.</p>
+  </section>
+
+  <section id="detail" class="detail" aria-label="Protocol detail" hidden></section>
+
+  <section aria-label="Protocols whose token already trades">
+    <h2>Already trading — not ranked</h2>
+    <p class="sub">These protocols record a token, so the board shows the market's own value, never a model's. They are here so the radar's line is visible — and so the sector medians above can be checked.</p>
+    <table id="live">
+      <thead><tr><th>Protocol</th><th>Sector</th><th class="num">TVL</th><th class="num">Market cap</th><th class="num">Mcap / TVL</th><th class="num">7d</th></tr></thead>
+      <tbody id="liveRows"></tbody>
+    </table>
+  </section>
+</main>
+
+<footer>
+  <h2>How to read this radar</h2>
+  <ul>
+    <li><strong>Implied value is the entry's own claim, never make.fun's.</strong> It is TVL × the market base (the median market-cap/TVL of the protocols in this snapshot whose token already trades) × a scale factor ((TVL / $32.6M)^−0.50, fitted on those 128 live protocols: market cap grows like the square root of TVL) × a sector factor (the protocol's own sector median, shrunk toward the market with a 60-protocol prior) × momentum (this week's change against the week's median, winsorised and tanh-bounded, weighted 0.2 in the exponent — the live peers show no reliable link between one week's growth and the multiple, so growth is a nudge, not a verdict) × a track-record factor (log age, 0.90–1.10) × a reach factor (log chains, capped at nine).</li>
+    <li><strong>Bands compare the implied multiple to the market base.</strong> A is ≥ 1.5× the base, B ≥ 1.0×, C ≥ 0.6×, else D. Small protocols land higher because live tokens trade richer at small size; that is the fitted scale effect, not a bonus for being small.</li>
+    <li><strong>“Records no token” is not “has no token.”</strong> The snapshot is one DefiLlama fetch; a protocol on the board may still have a token its record does not carry. Check before you farm.</li>
+    <li><strong>The watchlist is a floor, never a ceiling.</strong> Forty protocols clear the $50M floor with no token recorded; the board adds every rankable pre-token protocol below it, so the early finds are the point.</li>
+    <li><strong>Farm plans are plans, not promises.</strong> No airdrop is guaranteed, and no step here asks you to pay anyone to claim. Costs are gas plus the capital you choose to deploy.</li>
+  </ul>
+  <p class="src" id="src"></p>
+</footer>
+
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
